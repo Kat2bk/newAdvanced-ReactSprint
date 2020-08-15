@@ -5,7 +5,8 @@ export default class PlantList extends Component {
   constructor() {
     super();
     this.state = {
-      plants: []
+      plants: [],
+      input: ""
     }
   }
   // add state with a property called "plants" - initialize as an empty array
@@ -22,15 +23,38 @@ export default class PlantList extends Component {
       console.log("Unable to get data", error)
     })
   }
+
+  // filter stretch
+
+  filteringPlants = (plants) => {
+    return plants.filter(plant => {
+      if (!this.state.input) {
+        return plant
+      }
+      if(plant.name.toLowerCase().includes(this.state.input.toLowerCase())) {
+        return plant
+      }
+    })
+  }
+
+  handleInput = (event) => {
+    this.setState({
+      input: event.target.value
+    })
+  }
+
   // when the component mounts:
   //   - fetch data from the server endpoint - http://localhost:3333/plants
   //   - set the returned plants array to this.state.plants
 
-  /*********  DON'T CHANGE ANYTHING IN THE RENDER FUNCTION *********/
+  
+/*********  DON'T CHANGE ANYTHING IN THE RENDER FUNCTION *********/
+// need to change some for stretch
   render() {
     return (
       <main className="plant-list">
-        {this.state?.plants?.map((plant) => (
+      <input onChange={this.handleInput} type="text" placeholder="Search plants" />
+        {this.filteringPlants(this.state.plants).map((plant) => (
           <div className="plant-card" key={plant.id}>
             <img className="plant-image" src={plant.img} alt={plant.name} />
             <div className="plant-details">
